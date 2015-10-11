@@ -8,3 +8,5 @@
 
 2. fix stream watch bug
 
+3. Add leader api , manage etcd cluster
+
