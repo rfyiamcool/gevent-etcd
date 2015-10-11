@@ -16,10 +16,27 @@ class Client(object):
     def set(self, name, value, full_response=False, ttl=None):
         data = { 'value': value }
         if ttl:
-        data['ttl'] = ttl
+            data['ttl'] = ttl
 
         return self._execute_command('PUT', "keys", name, data,
                                  full_response=full_response)
+
+    def write(self, name, value, ttl=None, dir=False, append=False, **kwdargs):
+        data = { 'value': value }
+        if ttl:
+            data['ttl'] = ttl
+        return self._execute_command('PUT', "keys", name, data,
+                                 full_response=full_response)
+
+    def test_and_set(self, name, value, prev_value, ttl=None):
+        """
+        usage:
+            client.test_and_set('/key', 'new', 'old', ttl=60).value
+        """
+        return self.write(key, value, prevValue=prev_value, ttl=ttl)
+
+    def update(self):
+        pass
 
     def mkdir(self, name, ttl=None, full_response=False):
         data = { 'dir': True }
