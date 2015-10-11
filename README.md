@@ -6,7 +6,9 @@ gevent-etcd
 
 gevent-etcd 是一个使用gevent requests封装的python client模块. gevent-etcd用来解决在多任务并发下有io阻塞的情况. 要知道在github中有不少etcd的python模块，但是基本用都采用urllib http模块.跟gevent不怎么兼容. 虽然可以利用threading 、multiprocessing进行并发处理，但gevent协程的好处，我想大家知道！
 
-我个人的看法，在网络io堵塞的问题上，能用协程坚决不用线程.
+另外，gevent-etcd的功能还很简单，期待有人提交pull request
+
+我个人的看法，在网络io堵塞的问题上，能用协程坚决不用多线程.
 
 ## 用法
 
