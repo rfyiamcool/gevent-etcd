@@ -1,6 +1,8 @@
 #coding:utf-8
 
 import gevent
+from gevent import monkey
+monkey.patch_all()
 import requests
 
 class Client(object):
@@ -10,7 +12,7 @@ class Client(object):
         self.port = port
 
     def get(self, name, full_response=False):
-        return self._execute_command('GET', "keys", name,
+        return self.execute('GET', "keys", name,
             full_response=full_response)
 
     def set(self, name, value, full_response=False, ttl=None):
@@ -18,14 +20,14 @@ class Client(object):
         if ttl:
             data['ttl'] = ttl
 
-        return self._execute_command('PUT', "keys", name, data,
+        return self.execute('PUT', "keys", name, data,
                                  full_response=full_response)
 
     def write(self, name, value, ttl=None, dir=False, append=False, **kwdargs):
         data = { 'value': value }
         if ttl:
             data['ttl'] = ttl
-        return self._execute_command('PUT', "keys", name, data,
+        return self.execute('PUT', "keys", name, data,
                                  full_response=full_response)
 
     def test_and_set(self, name, value, prev_value, ttl=None):
@@ -44,16 +46,16 @@ class Client(object):
         if not ttl:
             data['ttl'] = ttl
 
-        return self._execute_command('PUT', "keys", name, data, no_answer=True,
+        return self.execute('PUT', "keys", name, data, no_answer=True,
                                    full_response=True)
 
     def listdir(self, name, recursive=False):
-        return self._execute_command('GET', "keys", "%s/?recursive=%s" % (name, recursive),
+        return self.execute('GET', "keys", "%s/?recursive=%s" % (name, recursive),
                                    full_response=True)
 
 
     def delete(self, name, full_response=False):
-        return self._execute_command('DELETE', "keys", name, no_answer=True,
+        return self.execute('DELETE', "keys", name, no_answer=True,
                                    full_response=full_response)
 
     def refresh_dir(self, name):
@@ -68,13 +70,13 @@ class Client(object):
         if ttl:
             data['ttl'] = ttl
 
-        return self._execute_command('PUT', "keys", name, data,
+        return self.execute('PUT', "keys", name, data,
                                    full_response=True)
 
     def watch(self, name, recursive=False):
         while True:
             try:
-                response = self._execute_command('GET', "keys", "%s?wait=true&recursive=%s" % (name, recursive), full_response=True)
+                response = self.execute('GET', "keys", "%s?wait=true&recursive=%s" % (name, recursive), full_response=True)
                 yield response
             except requests.exceptions.Timeout:
                 pass
@@ -122,4 +124,5 @@ class Client(object):
     def execute(self,*args ,**kwargs):
         g = gevent.spawn(_execute_command, *args, **kwargs)
         return g.value
+
 

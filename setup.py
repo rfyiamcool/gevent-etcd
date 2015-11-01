@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
         name = "gevent_etcd",
-        version = "2.1",
+        version = "2.3",
         author = "ruifengyun",
         author_email = "rfyiamcool@163.com",
         description = "a simple gevent requests etcd python client",
