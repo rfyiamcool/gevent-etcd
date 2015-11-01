@@ -1,6 +1,6 @@
 #coding:utf-8
 
-import grequests
+import gevent
 import requests
 
 class Client(object):
@@ -119,3 +119,7 @@ class Client(object):
 
         return self._parse_response(response, full_response=full_response,
                                   no_answer=no_answer)
+    def execute(self,*args ,**kwargs):
+        g = gevent.spawn(_execute_command, *args, **kwargs)
+        return g.value
+
